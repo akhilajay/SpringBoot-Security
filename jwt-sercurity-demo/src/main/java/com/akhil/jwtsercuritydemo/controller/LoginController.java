@@ -28,12 +28,12 @@ LoginRepository loginRepository;
 	
 	@Autowired
 	JWTUtils jWTUtils;*/
-
+/*
 	@PostMapping("/createLogin")
 	public  Login createLogin(@RequestBody Login login) {
 
 		return loginRepository.save(login);
-	}
+	}*/
 
 	@PostMapping("/login")
 	public Login login(@RequestBody Login login) {

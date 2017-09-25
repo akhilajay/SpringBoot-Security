@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.akhil.jwtsercuritydemo.entity.Login;
-import com.akhil.jwtsercuritydemo.rapository.LoginRepository;
 import com.akhil.jwtsercuritydemo.utils.AuthenticationHelper;
 import com.akhil.jwtsercuritydemo.utils.JWTProperties;
 import com.akhil.jwtsercuritydemo.utils.JWTUtils;
@@ -32,8 +30,6 @@ import com.akhil.jwtsercuritydemo.utils.JWTUtils;
 public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
-	@Autowired
-	LoginRepository loginRepository;
 
 	public JWTLoginFilter(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -41,22 +37,25 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException {
+	public Authentication attemptAuthentication(HttpServletRequest request,
+			HttpServletResponse response) throws AuthenticationException {
 
 		Login login = AuthenticationHelper.getLoginCredentials(request);
 
-		return authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword(), new ArrayList<>()));
+		return authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(login
+						.getUsername(), login.getPassword(), new ArrayList<>()));
 
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication auth) throws IOException, ServletException {
+	protected void successfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, FilterChain chain, Authentication auth)
+			throws IOException, ServletException {
 		Login login = new Login();
 		login.setUsername(auth.getName());
-		response.addHeader(JWTProperties.HEADER, JWTProperties.TOKENPREFIX + JWTUtils.generateToken(login));
+		response.addHeader(JWTProperties.HEADER, JWTProperties.TOKENPREFIX
+				+ JWTUtils.generateToken(login));
 
 	}
 

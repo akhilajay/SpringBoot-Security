@@ -19,7 +19,7 @@ import static java.util.Collections.emptyList;
  * @author akhilajay
  *
  */
-@Service
+@Service("userDetailServiceImpl")
 public class UserDetailServiceImpl implements UserDetailsService {
 	
 	@Autowired
